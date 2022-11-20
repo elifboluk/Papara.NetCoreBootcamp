@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryPattern.Domain.Entities;
 using RepositoryPattern.Services.Abstracts;
@@ -11,21 +12,19 @@ namespace RepositoryPattern.Api.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService productService;
-        public ProductController(IProductService productService)
+        private readonly IMapper mapper; // mapping
+
+        public ProductController(IProductService productService, IMapper mapper)
         {
             this.productService = productService;
+            this.mapper = mapper;
         }
 
         [HttpPost]
         public IActionResult Post(ProductDto product)
         {
-            var productDto = new Product
-            {
-                Name = product.Name,
-                Category = product.Category,
-                Barcode = product.Barcode
-            };
-            productService.Add(productDto);
+            var productDtoMapped = mapper.Map<Product>(product);
+            productService.Add(productDtoMapped);
             return Ok();
         }
 
@@ -39,7 +38,8 @@ namespace RepositoryPattern.Api.Controllers
         [HttpPut("Update")]
         public IActionResult Update(Product product)
         {
-            productService.Update(product);
+            var productDtoMapped = mapper.Map<Product>(product);
+            productService.Update(productDtoMapped);
             return Ok();
         }
 

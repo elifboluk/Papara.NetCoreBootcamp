@@ -2,6 +2,7 @@
 using RepositoryPattern.Data.Configurations;
 using RepositoryPattern.Domain.Entities;
 
+
 namespace RepositoryPattern.Data.Context // Veri tabanı bağlantısını sağlayacak context.
 {
     public class AppDbContext : DbContext
@@ -16,6 +17,7 @@ namespace RepositoryPattern.Data.Context // Veri tabanı bağlantısını sağla
         {
             base.OnModelCreating(modelBuilder); 
             modelBuilder.ApplyConfiguration(new ProductConfiguration()); // Tablo için oluşturduğumuz configure dosyalarını veri tabanına uygular. 
+            // modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly); // Birden fazla configuration dosyası için. DbContext'deki tüm table configurationları bulup register eder.
         }
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
