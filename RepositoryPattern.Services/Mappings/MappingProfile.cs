@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 
 namespace RepositoryPattern.Services.Mappings
 {
-    public class MappingProfile : Profile // Profile, AutoMapper'dan gelen eşleme içn kullandığımız sınftır. 
+    public class MappingProfile : Profile // Profile, AutoMapper'dan gelen eşleme içn kullandığımız sınıftır. 
     {
         public MappingProfile() // CreateMap 
         {
             CreateMap<Product, ProductDto>().ReverseMap();
+            CreateMap<User, UserDTO>().ReverseMap();
 
             /*
              CreateMap<Product, ProductDto>()

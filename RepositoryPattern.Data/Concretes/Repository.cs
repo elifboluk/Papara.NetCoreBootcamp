@@ -20,10 +20,17 @@ namespace RepositoryPattern.Data.Concretes
             _context = context;
             _table = _context.Set<T>();
         }
-        public void Add(T entity)
+        public List<T> Add(T entity)
         {
+            entity.Id = 0;
+            if (entity == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
             _table.Add(entity);
             this.Save();
+            var cachedList = _table.ToList();
+            return cachedList;
         }
 
         public void Delete(T entity)

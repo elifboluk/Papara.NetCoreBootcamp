@@ -1,3 +1,4 @@
+using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,6 +14,7 @@ using RepositoryPattern.Data.Concretes;
 using RepositoryPattern.Data.Context;
 using RepositoryPattern.Services.Abstracts;
 using RepositoryPattern.Services.Concretes;
+using RepositoryPattern.Services.Configurations;
 using RepositoryPattern.Services.Mappings;
 using System;
 using System.Collections.Generic;
@@ -43,10 +45,17 @@ namespace RepositoryPattern.Api
             services.AddDbContext<AppDbContext>(option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient(typeof(IUserService), typeof(UserService));
             services.AddTransient<IDapperRepository, DapperRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(typeof(MappingProfile));
             // services.AddAutoMapper(Assembly.GetExecutingAssembly()); // Profile'dan inherit alýnan bütün classlarý tarar ve register eder.
+            services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddHangfireServer();
+            services.AddMemoryCache();
+            services.AddTransient(typeof(ICacheService), typeof(CacheService));
+            
+            services.Configure<CacheConfiguration>(Configuration.GetSection("CacheConfiguration"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,6 +78,7 @@ namespace RepositoryPattern.Api
             {
                 endpoints.MapControllers();
             });
+            app.UseHangfireDashboard("/dashboard");
         }
     }
 }
