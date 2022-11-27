@@ -13,7 +13,7 @@ namespace RepositoryPattern.Data.Abstracts
         void Update(T entity); // Güncelleme
         void Delete(T entity); // Silme
         void HardDelete(T entity); // Veri tabanını komple silme
-        void GetById(int id);
+        void GetById(int id); // id ile getir
         int Save();
 
     }
